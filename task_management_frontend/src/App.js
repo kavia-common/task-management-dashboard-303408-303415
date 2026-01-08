@@ -1,48 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "./App.css";
+import Sidebar from "./components/Sidebar";
+import DashboardPage from "./pages/DashboardPage";
+import TasksPage from "./pages/TasksPage";
+import { TasksProvider } from "./state/TasksContext";
 
-// PUBLIC_INTERFACE
+/**
+ * PUBLIC_INTERFACE
+ * App entry component for the Task Management Dashboard UI.
+ */
 function App() {
-  const [theme, setTheme] = useState('light');
-
-  // Effect to apply theme to document element
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
-
-  // PUBLIC_INTERFACE
-  const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
-  };
-
   return (
-    <div className="App">
-      <header className="App-header">
-        <button 
-          className="theme-toggle" 
-          onClick={toggleTheme}
-          aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-        >
-          {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
-        </button>
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <p>
-          Current theme: <strong>{theme}</strong>
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <TasksProvider>
+      <BrowserRouter>
+        <div className="appShell">
+          <Sidebar />
+          <main className="main">
+            <Routes>
+              <Route path="/" element={<DashboardPage />} />
+              <Route path="/tasks" element={<TasksPage />} />
+            </Routes>
+          </main>
+        </div>
+      </BrowserRouter>
+    </TasksProvider>
   );
 }
 
